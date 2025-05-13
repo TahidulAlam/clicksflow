@@ -144,7 +144,7 @@ export default function DnDGrid() {
         </div>
       </div>
 
-      <div className="mt-5 p-4">
+      <div className="mt-5">
         <div className="dnd-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {metricCards}
         </div>

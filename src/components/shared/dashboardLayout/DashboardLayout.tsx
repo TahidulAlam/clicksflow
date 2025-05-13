@@ -41,15 +41,26 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         ></div>
       )}
       {/* Main Content pl-2 */}
-      <main className="flex-1 overflow-y-auto bg-[#E5EFFA] py-5 pr-5">
-        <Navbar toggleSidebar={toggleSidebar} />
+      {/* <main className="flex-1 overflow-y-auto bg-[#E5EFFA] py-5 pr-5">
+        <div>
+          <Navbar toggleSidebar={toggleSidebar} />
+        </div>
         {children}
+      </main> */}
+      <main className="flex-1 overflow-y-auto bg-[#E5EFFA] pr-5">
+        {/* Fixed Navbar */}
+        <div className="sticky top-5 bg-[#E5EFFA]  right-2 z-50">
+          <Navbar toggleSidebar={toggleSidebar} />
+        </div>
+        {/* left-20 */}
+        {/* Offset for navbar height */}
+        <div className="pt-5">{children}</div>
       </main>
     </div>
   );
 };
-// className="bg-white rounded-xl border border-gray-300"
 export default DashboardLayout;
+// className="bg-white rounded-xl border border-gray-300"
 // "use client";
 // import React, { useState } from "react";
 // import Sidebar from "./sidebar/Sidebar";
