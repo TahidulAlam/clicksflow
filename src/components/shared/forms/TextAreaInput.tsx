@@ -62,6 +62,7 @@ interface TextAreaInputProps<T extends FieldValues> {
   id?: string; // Added id prop
   name: Path<T>;
   label: string;
+  className?: string;
   register: UseFormRegister<T>;
   errors: FieldErrors<T>;
   disabled?: boolean;
@@ -75,6 +76,7 @@ const TextAreaInput = <T extends FieldValues>({
   id,
   name,
   label,
+  className,
   register,
   errors,
   disabled = false,
@@ -93,8 +95,10 @@ const TextAreaInput = <T extends FieldValues>({
         placeholder={placeholder}
         {...register(name)}
         rows={rows} // Apply the number of rows here
-        className={`p-2 border rounded-md border-gray-300 ${
-          error ? "border-red-500" : ""
+        className={`${className} p-2 border rounded-md border-gray-300 ${
+          error
+            ? "border-red-500"
+            : "border-gray-300 focus:outline-none focus:ring-0 focus:shadow-md"
         }`}
         disabled={disabled}
       />

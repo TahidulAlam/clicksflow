@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Modal from "@/components/shared/modal/Modal";
+import { Modal } from "@/components/shared/modal/Modal";
 import toast from "react-hot-toast";
 import TextInput from "@/components/shared/forms/TextInput";
 import StatusSelector from "@/components/shared/forms/StatusSelector";

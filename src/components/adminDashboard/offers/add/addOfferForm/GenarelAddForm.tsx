@@ -14,8 +14,8 @@ import TextInput from "../../../../shared/forms/TextInput";
 import TextAreaInput from "../../../../shared/forms/TextAreaInput";
 import SingleSelect from "../../../../shared/dataTable/SingleSelect";
 import ExpiresDate from "@/components/shared/forms/ExpiresDate";
-import AddAdvertiserModal from "./AddAdvertiserModal";
-import AddCategoryModal from "./AddCategoryModal";
+// import AddAdvertiserModal from "./AddAdvertiserModal";
+// import AddCategoryModal from "./AddCategoryModal";
 
 const advertiserOptions = [{ value: "profitnxt", label: "profit NXT" }];
 const categoryOptions = [
@@ -100,8 +100,8 @@ const GenarelAddForm: React.FC<GenarelAddFormProps> = ({
   const [url, setUrl] = useState("");
   const image = watch("image");
   const selectedStatus = watch("status");
-  const [isAdModalOpen, setIsAdModalOpen] = useState(false);
-  const [isCgModalOpen, setIsCgModalOpen] = useState(false);
+  // const [isAdModalOpen, setIsAdModalOpen] = useState(false);
+  // const [isCgModalOpen, setIsCgModalOpen] = useState(false);
   useEffect(() => {
     setShowSelect(toggle);
   }, [toggle]);
@@ -168,60 +168,66 @@ const GenarelAddForm: React.FC<GenarelAddFormProps> = ({
 
         <div className="flex gap-4">
           <div className="flex flex-col w-1/2 gap-2">
-            <SingleSelect
-              id="advertiser"
-              label="Advertiser"
-              options={advertiserOptions}
-              value={watch("advertiser")}
-              onChange={(val) => setValue("advertiser", val)}
-              error={errors.advertiser}
-              customModalTrigger={
-                <button
-                  type="button"
-                  onClick={() => setIsAdModalOpen(true)}
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  + Add
-                </button>
-              }
-            />
-
-            <AddAdvertiserModal
+            {/* <AddAdvertiserModal
               isOpen={isAdModalOpen}
               onClose={() => setIsAdModalOpen(false)}
-            />
-
-            <SingleSelect
-              id="category"
-              label="Category"
-              required
-              options={categoryOptions}
-              value={watch("category")}
-              onChange={(val) => setValue("category", val)}
-              error={errors.currency}
-              customModalTrigger={
-                <button
-                  type="button"
-                  onClick={() => setIsCgModalOpen(true)}
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  + Add
-                </button>
-              }
-            />
-            <AddCategoryModal
-              isOpen={isCgModalOpen}
-              onClose={() => setIsCgModalOpen(false)}
-            />
-            <SingleSelect
-              id="currency"
-              label="Default Currency"
-              required
-              options={currencyOptions}
-              value={watch("currency")}
-              onChange={(val) => setValue("currency", val)}
-              error={errors.currency}
-            />
+            /> */}
+            <div className="flex flex-col space-y-8">
+              <div className="z-40">
+                <SingleSelect
+                  id="category"
+                  label="Category"
+                  required
+                  options={categoryOptions}
+                  value={watch("category")}
+                  onChange={(val) => setValue("category", val)}
+                  error={errors.currency}
+                  customModalTrigger={
+                    <button
+                      type="button"
+                      // onClick={() => setIsCgModalOpen(true)}
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      + Add
+                    </button>
+                  }
+                />
+              </div>
+              <div className="z-30">
+                <SingleSelect
+                  id="advertiser"
+                  label="Advertiser"
+                  options={advertiserOptions}
+                  value={watch("advertiser")}
+                  onChange={(val) => setValue("advertiser", val)}
+                  error={errors.advertiser}
+                  customModalTrigger={
+                    <button
+                      type="button"
+                      // onClick={() => setIsAdModalOpen(true)}
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      + Add
+                    </button>
+                  }
+                />
+                {/* <AddCategoryModal
+                  isOpen={isCgModalOpen}
+                  onClose={() => setIsCgModalOpen(false)}
+                /> */}
+              </div>
+              <div className="z-20">
+                <SingleSelect
+                  id="currency"
+                  label="Default Currency"
+                  required
+                  options={currencyOptions}
+                  value={watch("currency")}
+                  onChange={(val) => setValue("currency", val)}
+                  error={errors.currency}
+                />
+              </div>
+            </div>
           </div>
           <div className="w-1/2">
             <ImageUploader

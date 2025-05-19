@@ -9,6 +9,7 @@ import ImageInput from "@/components/shared/forms/ImageInput";
 import toast from "react-hot-toast";
 import TextAreaInput from "@/components/shared/forms/TextAreaInput";
 import ToggleSwitch from "@/components/shared/buttons/ToggleSwitch";
+import FlexRow from "@/components/shared/responsibeForm/FlexRow";
 
 const emailsFormSchema = z.object({
   suppressionFile: z.string().min(1, "Suppression file is required"),
@@ -66,36 +67,48 @@ const EmailsForm: React.FC = () => {
             control={control}
             render={({ field }) => (
               <>
-                <ToggleSwitch
-                  label="Enable Email Instructions"
-                  checked={field.value ?? false}
-                  onChange={field.onChange}
-                  disabled={isSubmitting}
-                  aria-label="Enable Email Instructions"
-                />
-                {field.value && (
-                  <>
-                    <TextAreaInput
-                      name="subjectLines"
-                      label="Subject Lines"
-                      rows={2}
-                      register={register}
-                      errors={errors}
-                      required
-                      disabled={isSubmitting}
-                    />
+                <FlexRow cols={{ base: 1, sm: 1, md: 1, lg: 1 }} gap="0px">
+                  <ToggleSwitch
+                    label="Enable Email Instructions"
+                    checked={field.value ?? false}
+                    onChange={field.onChange}
+                    disabled={isSubmitting}
+                    aria-label="Enable Email Instructions"
+                  />
+                  {field.value && (
+                    <div className="w-px relative h-8 bg-gray-300 py-4 ml-5" />
+                  )}
+                  {field.value && (
+                    <>
+                      <FlexRow
+                        cols={{ base: 1, sm: 1, md: 1, lg: 1 }}
+                        className="bg-gray-50 border border-gray-300 p-4 rounded-lg"
+                      >
+                        <TextAreaInput
+                          name="subjectLines"
+                          className="bg-white"
+                          label="Subject Lines"
+                          rows={2}
+                          register={register}
+                          errors={errors}
+                          required
+                          disabled={isSubmitting}
+                        />
 
-                    <TextAreaInput
-                      name="fromLines"
-                      label="From Lines"
-                      rows={2}
-                      register={register}
-                      errors={errors}
-                      required
-                      disabled={isSubmitting}
-                    />
-                  </>
-                )}
+                        <TextAreaInput
+                          name="fromLines"
+                          className="bg-white"
+                          label="From Lines"
+                          rows={2}
+                          register={register}
+                          errors={errors}
+                          required
+                          disabled={isSubmitting}
+                        />
+                      </FlexRow>
+                    </>
+                  )}
+                </FlexRow>
               </>
             )}
           />
@@ -104,36 +117,46 @@ const EmailsForm: React.FC = () => {
             control={control}
             render={({ field }) => (
               <>
-                <ToggleSwitch
-                  label="Enable Email Opt-out"
-                  checked={field.value ?? false}
-                  onChange={field.onChange}
-                  disabled={isSubmitting}
-                  aria-label="Enable Email Opt-out"
-                />
-                {field.value && (
-                  <>
-                    <TextAreaInput
-                      name="suppressionFileURL"
-                      label="Suppression File URL"
-                      rows={2}
-                      register={register}
-                      errors={errors}
-                      required
-                      disabled={isSubmitting}
-                    />
+                <FlexRow cols={{ base: 1, sm: 1, md: 1, lg: 1 }} gap="0px">
+                  <ToggleSwitch
+                    label="Enable Email Opt-out"
+                    checked={field.value ?? false}
+                    onChange={field.onChange}
+                    disabled={isSubmitting}
+                    aria-label="Enable Email Opt-out"
+                  />
+                  {field.value && (
+                    <div className="w-px relative h-8 bg-gray-300 py-4 ml-5" />
+                  )}
+                  {field.value && (
+                    <>
+                      <FlexRow
+                        cols={{ base: 1, sm: 1, md: 1, lg: 1 }}
+                        className="bg-gray-50 border border-gray-300 p-4 rounded-lg"
+                      >
+                        <TextAreaInput
+                          name="suppressionFileURL"
+                          label="Suppression File URL"
+                          rows={2}
+                          register={register}
+                          errors={errors}
+                          required
+                          disabled={isSubmitting}
+                        />
 
-                    <TextAreaInput
-                      name="unsubscribeURL"
-                      label="Unsubscribe URL"
-                      rows={2}
-                      register={register}
-                      errors={errors}
-                      required
-                      disabled={isSubmitting}
-                    />
-                  </>
-                )}
+                        <TextAreaInput
+                          name="unsubscribeURL"
+                          label="Unsubscribe URL"
+                          rows={2}
+                          register={register}
+                          errors={errors}
+                          required
+                          disabled={isSubmitting}
+                        />
+                      </FlexRow>
+                    </>
+                  )}
+                </FlexRow>
               </>
             )}
           />

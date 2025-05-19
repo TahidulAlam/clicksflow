@@ -16,7 +16,13 @@ const kycData = [
 ];
 
 const kycColumns = [
-  { header: "ID", accessor: "id", searchable: true },
+  {
+    header: "ID",
+    accessor: "id",
+    searchable: true,
+    fixed: "left",
+    width: "80px",
+  },
   { header: "Name", accessor: "name", searchable: true },
   { header: "Account Manager", accessor: "accountManager", searchable: true },
   { header: "Sales Executive", accessor: "salesExecutive", searchable: true },
@@ -37,6 +43,8 @@ const kycColumns = [
     render: () => (
       <button className="text-blue-600 hover:underline">Edit</button>
     ),
+    fixed: "right",
+    width: "100px",
   },
 ];
 

@@ -37,7 +37,7 @@ export const formSchema = z.object({
   status: z.string().min(1, "Status is required"),
   offer: z.string().min(1, "Status is required"),
   visibleToPartner: z.boolean().optional(),
-  tags: z.array(z.string()).optional(),
+  // tags: z.array(z.string()).optional(),
   type: z.enum(
     ["archive", "email", "html", "image", "link", "text", "thumbnail", "video"],
     {
@@ -76,7 +76,7 @@ const CreativesAdd: React.FC<CreativesAddProps> = ({
     defaultValues: {
       creativeName: "",
       status: "",
-      tags: [],
+      // tags: [],
     },
   });
 
@@ -94,7 +94,7 @@ const CreativesAdd: React.FC<CreativesAddProps> = ({
   };
 
   return (
-    <Container>
+    <Container className="bg-white">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-6"

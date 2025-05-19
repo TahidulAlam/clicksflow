@@ -52,6 +52,7 @@ import React from "react";
 interface ToggleSwitchProps {
   label?: string;
   className?: string;
+  labelClassName?: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
   disabled?: boolean;
@@ -61,6 +62,7 @@ interface ToggleSwitchProps {
 const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   label,
   checked,
+  labelClassName,
   className,
   onChange,
   disabled = false,
@@ -96,7 +98,9 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       className={`flex flex-col items-start ${className ? className : "gap-4"}`}
     >
       {label && (
-        <label className="text-xs font-bold text-gray-800 truncate">
+        <label
+          className={`${labelClassName} text-xs font-bold text-gray-800 truncate`}
+        >
           {label}
         </label>
       )}

@@ -6,7 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaDollarSign } from "react-icons/fa";
 
-import Modal from "@/components/shared/modal/Modal";
+import { Modal } from "@/components/shared/modal/Modal";
 import TextInput from "@/components/shared/forms/TextInput";
 import ToggleSwitch from "@/components/shared/buttons/ToggleSwitch";
 import SingleSelect from "@/components/shared/dataTable/SingleSelect";
@@ -112,15 +112,50 @@ export const RevenueAddModal: React.FC<RevenueAddModalProps> = ({
           disabled={isSubmitting || isLoading}
         />
 
-        <ToggleSwitch
-          label="Private"
-          checked={isPrivate}
-          onChange={(val) => setValue("isPrivate", val)}
-          disabled={isSubmitting || isLoading}
-        />
-
-        <div className="grid grid-cols-6 gap-4">
-          <div className="col-span-2">
+        <div className="flex flex-col w-full">
+          <ToggleSwitch
+            label="Private"
+            checked={isPrivate}
+            onChange={(val) => setValue("isPrivate", val)}
+            disabled={isSubmitting || isLoading}
+          />
+          {!isPrivate && (
+            <div className="w-px relative h-5  bg-gray-300 -mt-3 py-4 ml-5" />
+          )}
+          {/* -rotate-90 */}
+          {!isPrivate && (
+            <div className="flex gap-4 rounded-lg bg-gray-50 border border-gray-300 py-4 px-4">
+              <div className="w-1/2">
+                <SingleSelect
+                  id="payoutType"
+                  label="Payout Type"
+                  required
+                  options={payoutTypeOptions}
+                  value={payoutTypeValue || ""}
+                  onChange={(val) => setValue("payoutType", val)}
+                  error={errors.payoutType}
+                  isDisabled={isSubmitting || isLoading}
+                />
+              </div>
+              <div className="w-1/2">
+                <NumberInput<RevenueEventData>
+                  name="costPerConversionEvent"
+                  label="Cost per Conversion"
+                  type="number"
+                  placeholder="Enter amount"
+                  icon={FaDollarSign}
+                  register={register}
+                  errors={errors}
+                  required
+                  valueAsNumber
+                  disabled={isSubmitting || isLoading}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="flex gap-4">
+          <div className="w-1/2">
             <SingleSelect
               id="revenueType"
               label="Revenue Type"
@@ -132,7 +167,7 @@ export const RevenueAddModal: React.FC<RevenueAddModalProps> = ({
               isDisabled={isSubmitting || isLoading}
             />
           </div>
-          <div className="col-span-2">
+          <div className="w-1/2">
             <NumberInput<RevenueEventData>
               name="revenuePerEvent"
               label="Revenue per Event"
@@ -147,37 +182,6 @@ export const RevenueAddModal: React.FC<RevenueAddModalProps> = ({
             />
           </div>
         </div>
-
-        {!isPrivate && (
-          <div className="grid grid-cols-6 gap-4">
-            <div className="col-span-2">
-              <SingleSelect
-                id="payoutType"
-                label="Payout Type"
-                required
-                options={payoutTypeOptions}
-                value={payoutTypeValue || ""}
-                onChange={(val) => setValue("payoutType", val)}
-                error={errors.payoutType}
-                isDisabled={isSubmitting || isLoading}
-              />
-            </div>
-            <div className="col-span-2">
-              <NumberInput<RevenueEventData>
-                name="costPerConversionEvent"
-                label="Cost per Conversion"
-                type="number"
-                placeholder="Enter amount"
-                icon={FaDollarSign}
-                register={register}
-                errors={errors}
-                required
-                valueAsNumber
-                disabled={isSubmitting || isLoading}
-              />
-            </div>
-          </div>
-        )}
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <ToggleSwitch

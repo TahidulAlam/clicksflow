@@ -361,11 +361,7 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
           w-full flex justify-between items-center text-left text-sm
           border rounded-md px-3 py-[8px] bg-white
           ${error ? "border-red-500" : "border-gray-300"}
-          ${
-            isDisabled
-              ? "bg-gray-100 cursor-not-allowed opacity-50"
-              : "hover:border-gray-400"
-          }
+          ${isDisabled ? "bg-gray-100 cursor-not-allowed opacity-50" : ""}
         `}
         aria-haspopup="listbox"
         aria-labelledby={`${inputId}-label`}

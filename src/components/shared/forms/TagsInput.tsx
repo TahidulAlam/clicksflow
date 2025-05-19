@@ -96,20 +96,20 @@ const TagsInput: React.FC<TagsInputProps> = ({
           )}
         </label>
       )}
-      <div className="flex flex-wrap items-center gap-2 px-3 py-[6px] bg-white border border-gray-300 rounded-md">
+      <div className="flex flex-wrap items-center gap-2 px-2 py-[6px] bg-white border border-gray-300 rounded-md focus:shadow-md focus:outline-none focus:ring-0">
         {tags.map((tag, index) => (
           <div
             key={index}
-            className="flex items-center bg-indigo-500 text-white px-3 py-[6px] rounded-md"
+            className="flex items-center text-xs bg-indigo-500 text-white pr-2 rounded"
           >
             <button
               type="button"
               onClick={() => removeTag(index)}
-              className="mr-1 text-white hover:text-gray-200"
+              className="px-1 py-[4px] flex justify-center text-center border-r border-gray-300 text-white hover:text-gray-200"
             >
               ×
             </button>
-            <span className="text-sm">{tag}</span>
+            <span className="text-sm px-1">{tag}</span>
           </div>
         ))}
         <input

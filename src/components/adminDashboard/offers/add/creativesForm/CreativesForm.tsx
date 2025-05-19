@@ -107,14 +107,14 @@ const CreativesForm: React.FC = () => {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="mt-5">
-            <table className="w-full max-w-xl text-left text-xs table-auto overflow-x-scroll mt-4">
-              <thead className="bg-gray-100 text-gray-600 border border-gray-400">
+            <table className="table-auto min-w-full border-separate border-spacing-0 text-xs rounded-t-lg">
+              <thead className="bg-gray-100 text-gray-600 ">
                 <tr>
-                  <th className="rounded-lg p-2">Parameter</th>
-                  <th className="rounded-lg p-2">Match Type</th>
-                  <th className="rounded-lg p-2">Value</th>
-                  <th className="rounded-lg p-2">Action</th>
-                  <th className="rounded-lg p-2">Edit/Delete</th>
+                  <th className="p-2">Parameter</th>
+                  <th className="p-2">Match Type</th>
+                  <th className="p-2">Value</th>
+                  <th className="p-2">Action</th>
+                  <th className="p-2">Edit/Delete</th>
                 </tr>
               </thead>
               <tbody>

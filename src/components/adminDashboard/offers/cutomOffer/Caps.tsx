@@ -18,7 +18,13 @@ const payoutCapData = [
 ];
 
 const payoutCapColumns = [
-  { header: "ID", accessor: "id", searchable: true },
+  {
+    header: "ID",
+    accessor: "id",
+    searchable: true,
+    fixed: "left",
+    width: "80px",
+  },
   { header: "Offers", accessor: "offers", searchable: true },
   { header: "Partners", accessor: "partners", searchable: true },
   { header: "Click Caps", accessor: "clickCaps", searchable: false },
@@ -27,7 +33,13 @@ const payoutCapColumns = [
   { header: "Revenue Caps", accessor: "revenueCaps", searchable: false },
   { header: "Created", accessor: "created", searchable: false },
   { header: "Modified", accessor: "modified", searchable: false },
-  { header: "Action", accessor: "action", searchable: false },
+  {
+    header: "Action",
+    accessor: "action",
+    searchable: false,
+    fixed: "right",
+    width: "100px",
+  },
 ];
 
 const Caps = () => (

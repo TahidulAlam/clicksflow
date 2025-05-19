@@ -35,7 +35,7 @@ const FormArea = <T extends ZodTypeAny>({
       className={className}
       noValidate
     >
-      <span className="text-sm text-gray-600">
+      <span className="text-xs text-gray-600">
         <span className="bg-blue-950 py-0.5 font-serif text-[10px] px-[6px] rounded-full  text-white">
           i
         </span>{" "}

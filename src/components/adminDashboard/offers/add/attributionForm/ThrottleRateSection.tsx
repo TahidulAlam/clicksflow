@@ -10,6 +10,7 @@ import ToggleSwitch from "@/components/shared/buttons/ToggleSwitch";
 import NumberInput from "@/components/shared/forms/NumberInput";
 import SingleSelect from "@/components/shared/dataTable/SingleSelect";
 import { AttributionFormData } from "./validationSchemas";
+import FlexRow from "@/components/shared/responsibeForm/FlexRow";
 
 interface ThrottleRateSectionProps {
   control: Control<AttributionFormData>;
@@ -32,22 +33,30 @@ export const ThrottleRateSection = ({
       name="applyThrottleRate"
       render={({ field }) => (
         <>
-          <ToggleSwitch
-            label="Apply Throttle Rate"
-            checked={field.value}
-            onChange={field.onChange}
-            disabled={isSubmitting || isLoading}
-            aria-label="Apply Throttle Rate"
-          />
-          {field.value && (
-            <div className="mt-4 flex gap-2">
-              <div className="w-1/2">
+          <div className="flex flex-col w-full">
+            <ToggleSwitch
+              label="Apply Throttle Rate"
+              checked={field.value}
+              onChange={field.onChange}
+              disabled={isSubmitting || isLoading}
+              aria-label="Apply Throttle Rate"
+            />
+            {field.value && (
+              <div className="w-px relative h-8 bg-gray-300 py-4 ml-5" />
+            )}
+            {field.value && (
+              <FlexRow
+                cols={{ base: 2, sm: 1, md: 2, lg: 2 }}
+                gap="gap-4"
+                className="mb-4 bg-gray-50 border border-gray-300 p-4 rounded-lg"
+              >
                 <Controller
                   control={control}
                   name="conversionStatus"
                   render={({ field: statusField }) => (
                     <SingleSelect
                       id="conversionStatus"
+                      className="bg-white"
                       label="Conversion Status"
                       showSearch={false}
                       required
@@ -61,8 +70,6 @@ export const ThrottleRateSection = ({
                     />
                   )}
                 />
-              </div>
-              <div className="w-1/2">
                 <Controller
                   control={control}
                   name="throttleRate"
@@ -82,9 +89,9 @@ export const ThrottleRateSection = ({
                     />
                   )}
                 />
-              </div>
-            </div>
-          )}
+              </FlexRow>
+            )}
+          </div>
         </>
       )}
     />

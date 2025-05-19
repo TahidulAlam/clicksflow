@@ -81,14 +81,14 @@ const EventRow = memo<EventRowProps>(
 
     return (
       <div
-        className="flex items-end"
+        className="flex gap-2"
         role="group"
         aria-label={`Event ${index + 1}`}
       >
-        <div className="flex-1">
+        <div className="w-1/2 mb-2">
           <SingleSelect
             id={`${fieldName}.${index}.baseRevenueType`}
-            className="rounded-l-md border-l-none py-1.5 px-3"
+            className="rounded-l-md border-l-none"
             required
             placeholder={baseRevenueOptions[0]?.label}
             options={baseRevenueOptions}
@@ -106,12 +106,11 @@ const EventRow = memo<EventRowProps>(
             aria-required="true"
           />
         </div>
-
-        <div className="flex-1">
+        <div className="w-1/2 flex mb-2">
           <input
             type="text"
             id={`${fieldName}.${index}.value`}
-            className="mt-1 block w-full border-r-none py-1.5 px-3 border border-gray-300  shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-100"
+            className="block w-full border-r-none py-2 px-3 border border-gray-300 rounded-l-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-100"
             placeholder={placeholder}
             value={value}
             onChange={handleValueChange}
@@ -124,17 +123,16 @@ const EventRow = memo<EventRowProps>(
               {fieldErrors[index].value.message}
             </p>
           )}
+          <button
+            type="button"
+            onClick={handleRemoveClick}
+            className="p-2 border border-red-500 bg-red-500 rounded-r-md text-white hover:bg-red-600 disabled:bg-red-300 transition-colors"
+            disabled={isDisabled}
+            aria-label={`Remove event ${index + 1}`}
+          >
+            <MdClose size={16} />
+          </button>
         </div>
-
-        <button
-          type="button"
-          onClick={handleRemoveClick}
-          className="p-2 border border-red-500 bg-red-500 rounded-r-md text-white hover:bg-red-600 disabled:bg-red-300 transition-colors"
-          disabled={isDisabled}
-          aria-label={`Remove event ${index + 1}`}
-        >
-          <MdClose size={16} />
-        </button>
       </div>
     );
   }
@@ -148,6 +146,8 @@ const DynamicSelectInputList: React.FC<DynamicSelectInputListProps> = ({
   placeholder = "Enter event name",
   isDisabled = false,
 }) => {
+  // const [hide, setHide] = useState(false);
+
   const {
     control,
     formState: { errors, isSubmitting },
@@ -166,16 +166,17 @@ const DynamicSelectInputList: React.FC<DynamicSelectInputListProps> = ({
     | undefined;
 
   const handleAdd = useCallback(() => {
+    // setHide(true);
     append({ baseRevenueType: "", value: "" });
   }, [append]);
 
   return (
-    <div className="space-y-3 flex justify-between">
-      <div className="flex items-center">
+    <div className="flex justify-between">
+      <div className="w-1/6 flex items-center">
         <button
           type="button"
           onClick={handleAdd}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 disabled:text-gray-400 transition-colors"
+          className="flex items-center bg-gray-50 z-10 border border-gray-300 rounded-lg p-1 gap-2 text-blue-600 hover:text-blue-800 disabled:text-gray-400 transition-colors"
           disabled={isDisabled || isSubmitting}
           aria-label="Add a new event"
         >
@@ -183,8 +184,17 @@ const DynamicSelectInputList: React.FC<DynamicSelectInputListProps> = ({
           <span className="text-sm font-medium">Add New</span>
         </button>
       </div>
-
-      <div className="">
+      {fields.length > 0 && (
+        <div className="w-2/6 flex">
+          <div className="w-px relative h-84 -rotate-90 bg-gray-300 py-4 ml-30" />
+        </div>
+      )}
+      <div
+        className={`space-y-2 w-3/6 z-10 p-4 pb-8  max-h-[336px] rounded-lg  ${
+          fields.length > 0 &&
+          "border border-gray-300 bg-gray-50 overflow-y-scroll"
+        }`}
+      >
         {fields.map((field, index) => (
           <EventRow
             key={field.id}

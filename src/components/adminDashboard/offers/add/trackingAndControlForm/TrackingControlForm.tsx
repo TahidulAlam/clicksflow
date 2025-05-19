@@ -11,6 +11,7 @@ import StatusSelector from "@/components/shared/forms/StatusSelector";
 import NumberInput from "@/components/shared/forms/NumberInput";
 import DynamicInputList from "../../../../shared/forms/DynamicInputList";
 import DynamicSelectInputList from "../../../../shared/forms/DynamicSelectInputList";
+import SectionDivider from "@/components/shared/SectionDivider";
 
 export const formSchema = z
   .object({
@@ -205,15 +206,11 @@ const TrackingControlForm = () => {
     reset,
     formState: { errors, isSubmitting, isLoading },
   } = form;
-
-  // Debug: Log customFields and additionalEvents whenever they change
-  // const customFields = watch("customFields");
-  // const additionalEvents = watch("additionalEvents");
-  // React.useEffect(() => {
-  //   console.log("Current customFields:", customFields);
-  //   console.log("Current additionalEvents:", additionalEvents);
-  // }, [customFields, additionalEvents]);
-
+  const isEnableCaps = watch("isEnableCaps");
+  const isEnforceCaps = watch("isEnforceCaps");
+  const status = watch("status");
+  const isEnableDuplicateClickFilter = watch("isEnableDuplicateClickFilter");
+  const uniqueSessionIdentifier = watch("uniqueSessionIdentifier");
   const onSubmit: SubmitHandler<FormData> = async (formData) => {
     try {
       console.log("Main Form Data:", formData);
@@ -231,8 +228,8 @@ const TrackingControlForm = () => {
         Fields with an asterisk (<span className="text-red-600">*</span>) are
         mandatory
       </h1>
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">Tracking</h2>
 
+      <SectionDivider label="Tracking" />
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SingleSelect
@@ -259,7 +256,7 @@ const TrackingControlForm = () => {
           />
         </div>
 
-        <div className="flex flex-wrap gap-6 bg-gray-50 p-4 rounded-lg">
+        <div className="grid grid-cols-3">
           <ToggleSwitch
             label="Force SSL"
             checked={watch("forceSSL")}
@@ -285,98 +282,119 @@ const TrackingControlForm = () => {
 
         <div>
           <div>
-            <h2 className="text-lg font-semibold">Tracking</h2>
-            <ToggleSwitch
-              label="Enable Caps"
-              checked={watch("isEnableCaps")}
-              onChange={(val) => setValue("isEnableCaps", val)}
-              disabled={isSubmitting || isLoading}
-            />
-
-            {watch("isEnableCaps") && (
-              <div className="flex flex-col gap-6 bg-gray-50 p-4 rounded-md">
-                <ToggleSwitch
-                  label="Enforce Caps Specific Timezone"
-                  checked={watch("isEnforceCaps")}
-                  onChange={(val) => setValue("isEnforceCaps", val)}
-                  disabled={isSubmitting || isLoading}
-                />
-
-                {watch("isEnforceCaps") && (
-                  <SingleSelect
-                    id="timezone"
-                    label="Timezone"
-                    required
-                    options={timezoneOptions}
-                    value={watch("timezone")}
-                    onChange={(val) => setValue("timezone", val)}
-                    error={errors.timezone}
-                    isDisabled={isSubmitting || isLoading}
-                  />
-                )}
-
-                <div className="flex flex-col gap-8 mt-6">
-                  {capsCategories.map((category) => (
-                    <div key={category}>
-                      <h3 className="text-md font-semibold mb-2">{category}</h3>
-                      <div className="grid grid-cols-4 gap-4">
-                        {capsTypes.map((type) => {
-                          const fieldName = `${category
-                            .split(" ")[0]
-                            .toLowerCase()}${type}Cap` as keyof FormData;
-                          return (
-                            <ToggleSwitch
-                              key={`${category}-${type}`}
-                              label={type}
-                              checked={!!watch(fieldName)}
-                              onChange={(val) => setValue(fieldName, val)}
-                              disabled={isSubmitting || isLoading}
-                            />
-                          );
-                        })}
+            <SectionDivider label="Caps" />
+            <div>
+              <ToggleSwitch
+                className="z-20"
+                labelClassName="my-2"
+                label="Enable Caps"
+                checked={isEnableCaps}
+                onChange={(val) => setValue("isEnableCaps", val)}
+                disabled={isSubmitting || isLoading}
+              />
+              {isEnableCaps && (
+                <div className="w-px relative h-6  bg-gray-300 py-4 ml-5" />
+              )}
+              {isEnableCaps && (
+                <div className="flex flex-col gap-6 border border-gray-300 bg-gray-50 p-4 rounded-md">
+                  <div className="flex flex-col w-full">
+                    <ToggleSwitch
+                      label="Enforce Caps Specific Timezone"
+                      checked={isEnforceCaps}
+                      onChange={(val) => setValue("isEnforceCaps", val)}
+                      disabled={isSubmitting || isLoading}
+                    />
+                    {isEnforceCaps && (
+                      <div className="w-px relative h-6  bg-gray-300 py-4 ml-5" />
+                    )}
+                    {isEnforceCaps && (
+                      <div className="gap-4 rounded-lg bg-gray-50 border border-gray-300 py-4 px-4">
+                        <SingleSelect
+                          id="timezone"
+                          label="Timezone"
+                          required
+                          options={timezoneOptions}
+                          value={watch("timezone")}
+                          onChange={(val) => setValue("timezone", val)}
+                          error={errors.timezone}
+                          isDisabled={isSubmitting || isLoading}
+                        />
                       </div>
-                    </div>
-                  ))}
+                    )}
+                  </div>
+
+                  <div className="flex flex-col gap-8 mt-6">
+                    {capsCategories.map((category) => (
+                      <div key={category}>
+                        <h3 className="text-md font-semibold mb-2">
+                          {category}
+                        </h3>
+                        <div className="grid grid-cols-4 gap-4">
+                          {capsTypes.map((type) => {
+                            const fieldName = `${category
+                              .split(" ")[0]
+                              .toLowerCase()}${type}Cap` as keyof FormData;
+                            return (
+                              <ToggleSwitch
+                                key={`${category}-${type}`}
+                                label={type}
+                                checked={!!watch(fieldName)}
+                                onChange={(val) => setValue(fieldName, val)}
+                                disabled={isSubmitting || isLoading}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+              )}
+            </div>
+          </div>
+
+          <SectionDivider label="Visibility" />
+
+          <div className="flex flex-col w-full">
+            <StatusSelector
+              setValue={setValue}
+              errors={errors}
+              isSubmitting={isSubmitting}
+              isLoading={isLoading}
+              selectedStatus={status}
+              options={visibilityStatus}
+              fieldName="status"
+              aria-required="true"
+            />
+            {status && (
+              <div className="w-px relative h-5  bg-gray-300 -mt-2 py-4 ml-36" />
+            )}
+            {status === "requiredApproval" && (
+              <div className="rounded-lg bg-gray-50 border border-gray-300 py-4 px-4">
+                <SingleSelect
+                  id="selectQuestionnaire"
+                  label="Select Questionnaire"
+                  required
+                  options={selectQuestionnaireOptions}
+                  value={watch("selectQuestionnaire") || ""}
+                  onChange={(val) => setValue("selectQuestionnaire", val)}
+                  error={errors.selectQuestionnaire}
+                  isDisabled={isSubmitting || isLoading}
+                  aria-required="true"
+                />
               </div>
             )}
           </div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Visibility
-          </h2>
-          <StatusSelector
-            setValue={setValue}
-            errors={errors}
-            isSubmitting={isSubmitting}
-            isLoading={isLoading}
-            selectedStatus={watch("status")}
-            options={visibilityStatus}
-            fieldName="status"
-            aria-required="true"
-          />
-          {watch("status") === "requiredApproval" && (
-            <SingleSelect
-              id="selectQuestionnaire"
-              label="Select Questionnaire"
-              required
-              options={selectQuestionnaireOptions}
-              value={watch("selectQuestionnaire") || ""}
-              onChange={(val) => setValue("selectQuestionnaire", val)}
-              error={errors.selectQuestionnaire}
-              isDisabled={isSubmitting || isLoading}
-              aria-required="true"
-            />
-          )}
         </div>
 
-        <div className="flex flex-col w-full gap-6 bg-gray-50 p-4 rounded-lg">
+        <div className="flex flex-col w-full gap-6 p-4 rounded-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <SingleSelect
               id="uniqueSessionIdentifier"
               label="Unique Session Identifier"
               required
               options={uniqueSessionIdentifierOptions}
-              value={watch("uniqueSessionIdentifier")}
+              value={uniqueSessionIdentifier}
               onChange={(val) => setValue("uniqueSessionIdentifier", val)}
               error={errors.uniqueSessionIdentifier}
               isDisabled={isSubmitting || isLoading}
@@ -417,33 +435,37 @@ const TrackingControlForm = () => {
               aria-required="true"
             />
           </div>
-
-          <ToggleSwitch
-            label="Enable Duplicate Click Filter"
-            checked={watch("isEnableDuplicateClickFilter")}
-            onChange={(val) => setValue("isEnableDuplicateClickFilter", val)}
-            disabled={isSubmitting || isLoading}
-            aria-label="Toggle Enable Duplicate Click Filter"
-          />
-          {watch("isEnableDuplicateClickFilter") && (
-            <SingleSelect
-              id="duplicateAction"
-              label="Duplicate Click Filter Action"
-              required
-              options={duplicateActionOptions}
-              value={watch("duplicateAction") || ""}
-              onChange={(val) => setValue("duplicateAction", val)}
-              error={errors.duplicateAction}
-              isDisabled={isSubmitting || isLoading}
-              aria-required="true"
+          <div className="flex flex-col w-full">
+            <ToggleSwitch
+              label="Enable Duplicate Click Filter"
+              checked={isEnableDuplicateClickFilter}
+              onChange={(val) => setValue("isEnableDuplicateClickFilter", val)}
+              disabled={isSubmitting || isLoading}
+              aria-label="Toggle Enable Duplicate Click Filter"
             />
-          )}
+            {isEnableDuplicateClickFilter && (
+              <div className="w-px relative h-5  bg-gray-300 py-4 ml-5" />
+            )}
+            {isEnableDuplicateClickFilter && (
+              <div className="rounded-lg bg-gray-50 border border-gray-300 py-4 px-4">
+                <SingleSelect
+                  id="duplicateAction"
+                  label="Duplicate Click Filter Action"
+                  required
+                  options={duplicateActionOptions}
+                  value={watch("duplicateAction") || ""}
+                  onChange={(val) => setValue("duplicateAction", val)}
+                  error={errors.duplicateAction}
+                  isDisabled={isSubmitting || isLoading}
+                  aria-required="true"
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold text-gray-800 mb-4">
-            Custom Fields
-          </h2>
+          <SectionDivider label="KPI Requirements" />
           <DynamicInputList
             form={form}
             fieldName="customFields"
@@ -454,21 +476,14 @@ const TrackingControlForm = () => {
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold text-gray-800 mb-4">
-            Additional Events
-          </h2>
+          <SectionDivider label="Additional Events" />
+
           <DynamicSelectInputList
             form={form}
             fieldName="additionalEvents"
             placeholder="Enter event name"
             isDisabled={isSubmitting || isLoading}
           />
-        </div>
-
-        <div>
-          <h2 className="text-sm font-semibold text-gray-800 mb-4">
-            Tracking Parameter Requirements
-          </h2>
         </div>
 
         <div className="flex justify-end mt-6">

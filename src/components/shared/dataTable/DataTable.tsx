@@ -1,13 +1,48 @@
 "use client";
-import React, { useMemo, useState, JSX } from "react";
-import { FaSort, FaSortUp, FaSortDown, FaEllipsisV } from "react-icons/fa";
+import React, {
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  JSX,
+} from "react";
+import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 
-interface Column<T> {
+export interface Column<T> {
   header: string;
-  accessor: keyof T | ((row: T) => string | number | JSX.Element);
+  accessor:
+    | keyof T
+    | ((row: T) => string | number | JSX.Element | React.ReactNode);
+  fixed?: "left" | "right";
+  stickyAfter?: number;
+  width?: string;
   searchable?: boolean;
-  sticky?: boolean;
 }
+
+// Assuming you have this Column<T> type in your DataTable component:
+// type Column<T> = {
+//   header: string;
+//   accessor:
+//     | keyof T
+//     | ((row: T) => string | number | React.ReactNode | JSX.Element);
+//   sortable?: boolean;
+//   searchable?: boolean;
+//   stickyAfter?: number;
+//   width?: string;
+//   fixed?: "left" | "right";
+// };
+
+// Assuming you have this Column<T> type in your DataTable component:
+// type Column<T> = {
+//   header: string;
+//   accessor: keyof T | ((row: T) => string | number | React.ReactNode);
+//   stickyAfter?: number;
+//   sortable?: boolean;
+//   searchable?: boolean;
+//   width?: string;
+//   fixed?: "left" | "right";
+// };
 
 interface DataTableProps<T extends Record<string, unknown>> {
   data: T[];
@@ -15,6 +50,20 @@ interface DataTableProps<T extends Record<string, unknown>> {
   defaultSortField?: keyof T;
   defaultSortOrder?: "asc" | "desc";
 }
+
+const throttle = <F extends (...args: never[]) => void>(
+  func: F,
+  limit: number
+): F => {
+  let inThrottle = false;
+  return ((...args: Parameters<F>) => {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  }) as F;
+};
 
 const DataTable = <T extends Record<string, unknown>>({
   data,
@@ -26,72 +75,158 @@ const DataTable = <T extends Record<string, unknown>>({
     defaultSortField
   );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">(defaultSortOrder);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleSort = (field: keyof T | string) => {
-    if (sortField === field) {
-      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-    } else {
-      setSortField(field);
-      setSortOrder("asc");
-    }
-  };
+  // Create column map for faster access
+  const columnMap = useMemo(() => {
+    const map = new Map<string | keyof T, Column<T>>();
+    columns.forEach((col) => {
+      const key =
+        typeof col.accessor === "function" ? col.header : col.accessor;
+      map.set(key, col);
+    });
+    return map;
+  }, [columns]);
 
+  // Handle scroll with throttling
+  const handleScroll = useCallback(() => {
+    setScrollLeft(containerRef.current?.scrollLeft || 0);
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const throttledScroll = throttle(handleScroll, 50);
+    container.addEventListener("scroll", throttledScroll);
+    return () => container.removeEventListener("scroll", throttledScroll);
+  }, [handleScroll]);
+
+  // Calculate sticky states
+  const stickyStates = useMemo(
+    () =>
+      columns.map((col) => ({
+        isSticky:
+          Boolean(col.fixed) ||
+          (col.stickyAfter !== undefined && scrollLeft >= col.stickyAfter),
+        side: col.fixed || (col.stickyAfter !== undefined ? "left" : null),
+      })),
+    [columns, scrollLeft]
+  );
+
+  // Precompute column styles
+  const [columnStyles, headerStyles] = useMemo(() => {
+    let accumulatedLeft = 0;
+    const leftOffsets = columns.map((col) => {
+      const offset = accumulatedLeft;
+      if (col.fixed === "left")
+        accumulatedLeft += parseInt(col.width || "150", 10);
+      return offset;
+    });
+
+    let accumulatedRight = 0;
+    const rightOffsets = columns
+      .slice()
+      .reverse()
+      .map((col) => {
+        const offset = accumulatedRight;
+        if (col.fixed === "right")
+          accumulatedRight += parseInt(col.width || "150", 10);
+        return offset;
+      })
+      .reverse();
+
+    const columnStyles = columns.map((col, idx) => {
+      const state = stickyStates[idx];
+      const style: React.CSSProperties = {
+        width: col.width || "150px",
+        minWidth: col.width || "150px",
+        maxWidth: col.width || "150px",
+      };
+
+      if (state.isSticky) {
+        style.position = "sticky";
+        style.zIndex = 10;
+        style.backgroundColor = "#ffffff";
+        style[state.side === "right" ? "right" : "left"] =
+          state.side === "right" ? rightOffsets[idx] : leftOffsets[idx];
+      }
+
+      return style;
+    });
+
+    const headerStyles = columns.map((col, idx) => ({
+      ...columnStyles[idx],
+      zIndex: 30,
+      backgroundColor: "#f3f4f6",
+    }));
+
+    return [columnStyles, headerStyles, leftOffsets, rightOffsets];
+  }, [columns, stickyStates]);
+
+  // Sorting logic
   const sortedData = useMemo(() => {
-    const result = [...data];
+    if (!sortField) return data;
+    const column = columnMap.get(sortField);
+    if (!column) return data;
 
-    if (sortField) {
-      result.sort((a, b) => {
-        const col = columns.find((c) =>
-          typeof c.accessor === "function"
-            ? c.header === sortField
-            : c.accessor === sortField
-        );
+    return [...data].sort((a, b) => {
+      const getValue = (item: T) =>
+        typeof column.accessor === "function"
+          ? column.accessor(item)
+          : item[column.accessor as keyof T];
 
-        const getValue = (row: T) =>
-          typeof col?.accessor === "function"
-            ? col.accessor(row)
-            : row[sortField as keyof T];
+      const aVal = getValue(a);
+      const bVal = getValue(b);
 
-        const aValue = getValue(a);
-        const bValue = getValue(b);
-
-        if (aValue == null || bValue == null) return 0;
-
-        if (typeof aValue === "string" && typeof bValue === "string") {
-          return sortOrder === "asc"
-            ? aValue.localeCompare(bValue)
-            : bValue.localeCompare(aValue);
-        }
-
+      if (typeof aVal === "string" && typeof bVal === "string") {
         return sortOrder === "asc"
-          ? (aValue as number) - (bValue as number)
-          : (bValue as number) - (aValue as number);
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      }
+      return sortOrder === "asc"
+        ? Number(aVal) - Number(bVal)
+        : Number(bVal) - Number(aVal);
+    });
+  }, [data, sortField, sortOrder, columnMap]);
+
+  // Sorting handler
+  const handleSort = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const colKey = e.currentTarget.dataset.colkey;
+    if (colKey) {
+      setSortField((prev) => {
+        if (prev === colKey)
+          setSortOrder((order) => (order === "asc" ? "desc" : "asc"));
+        else setSortOrder("asc");
+        return colKey;
       });
     }
-
-    return result;
-  }, [data, columns, sortField, sortOrder]);
+  }, []);
 
   return (
-    <div className="w-full text-xs font-medium">
-      <div className="overflow-x-auto max-h-[500px] border border-gray-300 rounded-md">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100 sticky top-0 z-10">
+    <div
+      className="w-full text-xs font-medium overflow-x-auto"
+      ref={containerRef}
+    >
+      <div className="border border-gray-300 rounded-md max-h-[500px] overflow-auto">
+        <table className="table-auto min-w-full border-separate border-spacing-0">
+          <thead className="bg-gray-100 sticky top-0 z-20">
             <tr>
               {columns.map((col, idx) => {
-                const columnKey =
+                const colKey =
                   typeof col.accessor === "function"
                     ? col.header
                     : (col.accessor as string);
-                const isSorted = sortField === columnKey;
+                const isSorted = sortField === colKey;
 
                 return (
                   <th
                     key={idx}
-                    onClick={() => handleSort(columnKey)}
-                    className={`px-4 py-5 text-left text-xs font-semibold text-gray-600 whitespace-nowrap tracking-wider cursor-pointer ${
-                      col.sticky ? "sticky left-0 bg-gray-100 z-[1000]" : ""
-                    }`}
+                    data-colkey={colKey}
+                    onClick={handleSort}
+                    className="px-4 py-4 text-start font-semibold text-gray-600 tracking-wider cursor-pointer whitespace-nowrap"
+                    style={headerStyles[idx]}
                   >
                     <div className="flex items-center gap-1">
                       {col.header}
@@ -108,17 +243,14 @@ const DataTable = <T extends Record<string, unknown>>({
                   </th>
                 );
               })}
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky right-0 z-[1000] bg-gray-100">
-                Action
-              </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white text-start divide-y divide-gray-200">
             {sortedData.length === 0 ? (
               <tr>
                 <td
-                  colSpan={columns.length + 1}
-                  className="px-4 py-4 text-center text-gray-500"
+                  colSpan={columns.length}
+                  className="px-4 py-4 text-start text-gray-500"
                 >
                   No data found
                 </td>
@@ -130,24 +262,23 @@ const DataTable = <T extends Record<string, unknown>>({
                     const value =
                       typeof col.accessor === "function"
                         ? col.accessor(row)
-                        : row[col.accessor];
+                        : row[col.accessor as keyof T];
 
                     return (
                       <td
                         key={colIndex}
-                        className={`px-4 py-3 whitespace-nowrap text-center text-gray-900 ${
-                          col.sticky ? "sticky left-0 bg-white" : ""
-                        }`}
+                        className="px-4 py-3 text-start text-gray-900 whitespace-nowrap"
+                        style={columnStyles[colIndex]}
                       >
-                        {typeof value === "string" || typeof value === "number"
+                        {/* {value ?? "-"} */}
+                        {typeof value === "string" ||
+                        typeof value === "number" ||
+                        React.isValidElement(value)
                           ? value
-                          : (value as React.ReactNode) ?? "-"}
+                          : "-"}
                       </td>
                     );
                   })}
-                  <td className="sticky px-4 py-3 text-gray-500">
-                    <FaEllipsisV className="cursor-pointer" />
-                  </td>
                 </tr>
               ))
             )}
@@ -157,4 +288,5 @@ const DataTable = <T extends Record<string, unknown>>({
     </div>
   );
 };
+
 export default DataTable;

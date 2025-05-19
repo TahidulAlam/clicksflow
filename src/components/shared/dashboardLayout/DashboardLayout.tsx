@@ -49,7 +49,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       </main> */}
       <main className="flex-1 overflow-y-auto bg-[#E5EFFA] pr-5">
         {/* Fixed Navbar */}
-        <div className="sticky top-5 bg-[#E5EFFA]  right-2 z-50">
+        <div className="sticky top-5 right-2 z-50">
           <Navbar toggleSidebar={toggleSidebar} />
         </div>
         {/* left-20 */}

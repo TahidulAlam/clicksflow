@@ -20,15 +20,36 @@ const conversionData = [
 ];
 
 const conversionColumns = [
-  { header: "Pixel ID", accessor: "id", searchable: true },
+  {
+    header: "Pixel ID",
+    accessor: "id",
+    searchable: true,
+    fixed: "left",
+    width: "100px",
+  },
   { header: "Partner", accessor: "partner", searchable: true },
   { header: "Offer", accessor: "offer", searchable: true },
   { header: "Level", accessor: "level", searchable: true },
   { header: "Method", accessor: "method", searchable: true },
-  { header: "Postback URL", accessor: "postbackURL", searchable: false },
-  { header: "HTML Code", accessor: "htmlCode", searchable: false },
-  { header: "Descriptions", accessor: "descriptions", searchable: false },
-  { header: "Created", accessor: "created", searchable: false },
+  {
+    header: "Postback URL",
+    accessor: "postbackURL",
+    searchable: false,
+    width: "200px",
+  },
+  {
+    header: "HTML Code",
+    accessor: "htmlCode",
+    searchable: false,
+    width: "200px",
+  },
+  {
+    header: "Descriptions",
+    accessor: "descriptions",
+    searchable: false,
+    width: "200px",
+  },
+  { header: "Created", accessor: "created", searchable: false, width: "200px" },
   { header: "Modified", accessor: "modified", searchable: false },
   {
     header: "Action",
@@ -37,6 +58,8 @@ const conversionColumns = [
     render: () => (
       <button className="text-blue-600 hover:underline">Edit</button>
     ),
+    fixed: "right",
+    width: "100px",
   },
 ];
 

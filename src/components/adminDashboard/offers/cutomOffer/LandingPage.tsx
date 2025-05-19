@@ -17,7 +17,13 @@ const payoutDestinationData = [
 ];
 
 const payoutDestinationColumns = [
-  { header: "ID", accessor: "id", searchable: true },
+  {
+    header: "ID",
+    accessor: "id",
+    searchable: true,
+    fixed: "left",
+    width: "80px",
+  },
   { header: "Name", accessor: "name", searchable: true },
   { header: "Offers", accessor: "offers", searchable: true },
   { header: "Partners", accessor: "partners", searchable: true },
@@ -29,7 +35,13 @@ const payoutDestinationColumns = [
   },
   { header: "Created", accessor: "created", searchable: false },
   { header: "Modified", accessor: "modified", searchable: false },
-  { header: "Action", accessor: "action", searchable: false },
+  {
+    header: "Action",
+    accessor: "action",
+    searchable: false,
+    fixed: "right",
+    width: "100px",
+  },
 ];
 
 const LandingPage = () => (

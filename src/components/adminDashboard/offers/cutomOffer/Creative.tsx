@@ -18,7 +18,13 @@ const creativeData = [
 ];
 
 const creativeColumns = [
-  { header: "ID", accessor: "id", searchable: true },
+  {
+    header: "ID",
+    accessor: "id",
+    searchable: true,
+    fixed: "left",
+    width: "80px",
+  },
   { header: "Name", accessor: "name", searchable: true },
   { header: "Offers", accessor: "offers", searchable: true },
   { header: "Partners", accessor: "partners", searchable: true },
@@ -27,6 +33,7 @@ const creativeColumns = [
     header: "Preview",
     accessor: "preview",
     searchable: false,
+    width: "300px",
     render: (row: { preview: string }) => (
       <a
         href={row.preview}
@@ -42,6 +49,7 @@ const creativeColumns = [
     header: "Download",
     accessor: "download",
     searchable: false,
+    width: "300px",
     render: (row: { download: string }) => (
       <a
         href={row.download}
@@ -55,7 +63,13 @@ const creativeColumns = [
   },
   { header: "Created", accessor: "created", searchable: false },
   { header: "Modified", accessor: "modified", searchable: false },
-  { header: "Action", accessor: "action", searchable: false },
+  {
+    header: "Action",
+    accessor: "action",
+    searchable: false,
+    fixed: "right",
+    width: "100px",
+  },
 ];
 
 const Creative = () => (

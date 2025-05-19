@@ -10,6 +10,7 @@ import { AttributionFormData } from "./validationSchemas";
 import ToggleSwitch from "@/components/shared/buttons/ToggleSwitch";
 import SingleSelect from "@/components/shared/dataTable/SingleSelect";
 import NumberInput from "@/components/shared/forms/NumberInput";
+import FlexRow from "@/components/shared/responsibeForm/FlexRow";
 
 interface ConversionTimeSectionProps {
   control: Control<AttributionFormData>;
@@ -32,16 +33,23 @@ export const ConversionTimeSection = ({
       name="conversionTime"
       render={({ field }) => (
         <>
-          <ToggleSwitch
-            label="Enable Click to Conversion Time"
-            checked={field.value}
-            onChange={field.onChange}
-            disabled={isSubmitting || isLoading}
-            aria-label="Enable Click to Conversion Time"
-          />
-          {field.value && (
-            <div className="flex flex-col w-full gap-2 mt-4">
-              <div className="flex flex-col gap-4">
+          <div className="flex flex-col w-full">
+            <ToggleSwitch
+              label="Enable Click to Conversion Time"
+              checked={field.value}
+              onChange={field.onChange}
+              disabled={isSubmitting || isLoading}
+              aria-label="Enable Click to Conversion Time"
+            />
+            {field.value && (
+              <div className="w-px relative h-8 bg-gray-300 py-4 ml-5" />
+            )}
+            {field.value && (
+              <FlexRow
+                cols={{ base: 1, sm: 1, md: 1, lg: 1 }}
+                gap="gap-4"
+                className="mb-4 bg-gray-50 border border-gray-300 p-4 rounded-lg"
+              >
                 <Controller
                   control={control}
                   name="minConversionTime"
@@ -65,6 +73,7 @@ export const ConversionTimeSection = ({
                           <div className="w-1/2">
                             <NumberInput
                               id="minSessionLifespan"
+                              className="bg-white"
                               label="Session Lifespan"
                               type="number"
                               placeholder="Enter seconds"
@@ -167,9 +176,9 @@ export const ConversionTimeSection = ({
                     </div>
                   )}
                 />
-              </div>
-            </div>
-          )}
+              </FlexRow>
+            )}
+          </div>
         </>
       )}
     />

@@ -9,6 +9,8 @@ import { toast } from "react-hot-toast";
 import ToggleSwitch from "@/components/shared/buttons/ToggleSwitch";
 
 import FormActions from "@/components/shared/forms/FormActions";
+import FlexRow from "@/components/shared/responsibeForm/FlexRow";
+import Container from "@/components/shared/container/Container";
 
 export const formSchema = z.object({
   specificTrackingDomain: z.string().min(1, "Base Revenue Type is required"),
@@ -99,68 +101,75 @@ const CapControl = () => {
   const isEnableCaps = watch("isEnableCaps");
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      {/* Enable Caps */}
-      <span className="text-xs lg:my-6 my-2">
-        Fields with an asterisk (<span className="text-red-700">*</span>) are
-        required
-      </span>
-      <Controller
-        name="isEnableCaps"
-        control={control}
-        render={({ field }) => (
-          <ToggleSwitch
-            size="lg"
-            label="Enable Caps"
-            checked={Boolean(field.value)}
-            onChange={field.onChange}
-            disabled={isSubmitting || isLoading}
+    <Container>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+        {/* Enable Caps */}
+        <span className="text-xs my-2">
+          Fields with an asterisk (<span className="text-red-700">*</span>) are
+          required
+        </span>
+        <FlexRow cols={{ base: 1, lg: 1 }} gap="0px">
+          <Controller
+            name="isEnableCaps"
+            control={control}
+            render={({ field }) => (
+              <ToggleSwitch
+                size="lg"
+                label="Enable Caps"
+                checked={Boolean(field.value)}
+                onChange={field.onChange}
+                disabled={isSubmitting || isLoading}
+              />
+            )}
           />
-        )}
-      />
-
-      {isEnableCaps && (
-        <div className="flex flex-col gap-6 bg-gray-50 p-4 rounded-md">
-          {/* Caps Matrix */}
-          <div className="flex flex-col gap-8 mt-2">
-            {capsCategories.map((category) => (
-              <div key={category}>
-                <h3 className="text-md font-semibold mb-2">
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </h3>
-                <div className="grid grid-cols-4 gap-4">
-                  {capsTypes.map((type) => {
-                    const fieldName = `${category}${type}Cap` as keyof FormData;
-                    return (
-                      <Controller
-                        key={fieldName}
-                        name={fieldName}
-                        control={control}
-                        render={({ field }) => (
-                          <ToggleSwitch
-                            label={type}
-                            size="lg"
-                            checked={Boolean(field.value)}
-                            onChange={field.onChange}
-                            disabled={isSubmitting || isLoading}
+          {isEnableCaps && (
+            <div className="w-px relative h-8 bg-gray-300 py-4 ml-5" />
+          )}
+          {isEnableCaps && (
+            <div className="flex flex-col gap-6 border border-gray-300 rounded-lg bg-gray-50 p-4">
+              {/* Caps Matrix */}
+              <div className="flex flex-col gap-8 mt-2">
+                {capsCategories.map((category) => (
+                  <div key={category}>
+                    <h3 className="text-md font-semibold mb-2">
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </h3>
+                    <div className="grid grid-cols-4 gap-4">
+                      {capsTypes.map((type) => {
+                        const fieldName =
+                          `${category}${type}Cap` as keyof FormData;
+                        return (
+                          <Controller
+                            key={fieldName}
+                            name={fieldName}
+                            control={control}
+                            render={({ field }) => (
+                              <ToggleSwitch
+                                label={type}
+                                size="lg"
+                                checked={Boolean(field.value)}
+                                onChange={field.onChange}
+                                disabled={isSubmitting || isLoading}
+                              />
+                            )}
                           />
-                        )}
-                      />
-                    );
-                  })}
-                </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            </div>
+          )}
+        </FlexRow>
 
-      <FormActions
-        isSubmitting={isSubmitting}
-        isLoading={isLoading}
-        onCancel={() => reset()}
-      />
-    </form>
+        <FormActions
+          isSubmitting={isSubmitting}
+          isLoading={isLoading}
+          onCancel={() => reset()}
+        />
+      </form>
+    </Container>
   );
 };
 

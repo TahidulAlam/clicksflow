@@ -22,20 +22,20 @@ const OfferGroupStatus: React.FC<OfferGroupStatusProps> = ({
 }) => {
   const [value, setValue] = React.useState(selectedValue || "");
 
-  console.log("Selected value:", value);
-
   return (
-    <div className="flex justify-between items-center rounded-md">
-      <div className="w-1/5">
+    <div className="flex w-full">
+      <div className="z-10 self-start py-4 pr-4">
         <ToggleSwitch
           label="Offer Group Status"
           checked={toggle}
           onChange={setToggle}
         />
       </div>
-
-      <div className="w-4/5">
-        {showSelect && (
+      {showSelect && (
+        <div className="w-px relative h-36 -rotate-90 bg-gray-300 -mt-3 py-4" />
+      )}
+      {showSelect && (
+        <div className="self-start w-full z-10 p-4 pb-8 border border-gray-300 rounded-lg bg-gray-50">
           <SingleSelect
             id="offerGroup"
             label="Offer Group"
@@ -48,13 +48,13 @@ const OfferGroupStatus: React.FC<OfferGroupStatusProps> = ({
             value={value}
             onChange={(val) => {
               setValue(val);
-              onChange?.(val); // trigger parent handler if provided
+              onChange?.(val);
             }}
             placeholder={placeholder || "Select an option"}
             error={undefined}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

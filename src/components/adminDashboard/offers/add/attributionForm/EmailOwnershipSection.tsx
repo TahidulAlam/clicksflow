@@ -5,6 +5,7 @@ import { AttributionFormData } from "./validationSchemas";
 import ToggleSwitch from "@/components/shared/buttons/ToggleSwitch";
 import SingleSelect from "@/components/shared/dataTable/SingleSelect";
 import NumberInput from "@/components/shared/forms/NumberInput";
+import FlexRow from "@/components/shared/responsibeForm/FlexRow";
 
 interface EmailOwnershipSectionProps {
   control: Control<AttributionFormData>;
@@ -25,48 +26,58 @@ export const EmailOwnershipSection = ({
       name="enableMaxEmail"
       render={({ field }) => (
         <>
-          <ToggleSwitch
-            label="Enable Email Ownership"
-            checked={field.value}
-            onChange={field.onChange}
-            disabled={isSubmitting || isLoading}
-            aria-label="Enable Email Ownership"
-          />
-          {field.value && (
-            <div className="mt-4 space-y-4">
-              <Controller
-                control={control}
-                name="emailAttributionMethod"
-                render={({ field: methodField }) => (
-                  <SingleSelect
-                    id="emailAttributionMethod"
-                    label="Email Attribution Method"
-                    required
-                    showSearch={false}
-                    options={attributionMethodOptions}
-                    value={methodField.value}
-                    onChange={methodField.onChange}
-                    error={errors.emailAttributionMethod}
-                    isDisabled={isSubmitting || isLoading}
-                    aria-required="true"
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="enableViewThroughLookbackWindow"
-                render={({ field: maxField }) => (
-                  <div className="mt-4">
-                    <ToggleSwitch
-                      label="Enable Max Email Attribution Window"
-                      checked={maxField.value}
-                      onChange={maxField.onChange}
-                      disabled={isSubmitting || isLoading}
-                      aria-label="Enable Max Email Attribution Window"
+          <FlexRow cols={{ base: 1, sm: 1, md: 1, lg: 1 }} gap="0px">
+            <ToggleSwitch
+              label="Enable Email Ownership"
+              checked={field.value}
+              onChange={field.onChange}
+              disabled={isSubmitting || isLoading}
+              aria-label="Enable Email Ownership"
+            />
+            {field.value && (
+              <div className="w-px relative h-8 bg-gray-300 py-4 ml-5" />
+            )}
+            {field.value && (
+              <div className=" bg-gray-50 border border-gray-300 p-4 rounded-lg">
+                <Controller
+                  control={control}
+                  name="emailAttributionMethod"
+                  render={({ field: methodField }) => (
+                    <SingleSelect
+                      id="emailAttributionMethod"
+                      label="Email Attribution Method"
+                      required
+                      showSearch={false}
+                      options={attributionMethodOptions}
+                      value={methodField.value}
+                      onChange={methodField.onChange}
+                      error={errors.emailAttributionMethod}
+                      isDisabled={isSubmitting || isLoading}
+                      aria-required="true"
                     />
-                    {maxField.value && (
-                      <div className="flex gap-4 mt-4">
-                        <div className="w-1/2">
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="enableViewThroughLookbackWindow"
+                  render={({ field: maxField }) => (
+                    <div className="mt-4">
+                      <ToggleSwitch
+                        label="Enable Max Email Attribution Window"
+                        checked={maxField.value}
+                        onChange={maxField.onChange}
+                        disabled={isSubmitting || isLoading}
+                        aria-label="Enable Max Email Attribution Window"
+                      />
+                      {maxField.value && (
+                        <div className="w-px relative h-8 bg-gray-300 py-4 ml-5" />
+                      )}
+                      {maxField.value && (
+                        <FlexRow
+                          cols={{ base: 2, sm: 1, md: 2, lg: 2 }}
+                          gap="gap-4"
+                          className=" bg-gray-50 border border-gray-300 p-4 rounded-lg"
+                        >
                           <Controller
                             control={control}
                             name="maxEmailAttributionWindowType"
@@ -85,8 +96,6 @@ export const EmailOwnershipSection = ({
                               />
                             )}
                           />
-                        </div>
-                        <div className="w-1/2">
                           <Controller
                             control={control}
                             name="maxEmailAttributionWindow"
@@ -146,14 +155,14 @@ export const EmailOwnershipSection = ({
                               </>
                             )}
                           />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              />
-            </div>
-          )}
+                        </FlexRow>
+                      )}
+                    </div>
+                  )}
+                />
+              </div>
+            )}
+          </FlexRow>
         </>
       )}
     />

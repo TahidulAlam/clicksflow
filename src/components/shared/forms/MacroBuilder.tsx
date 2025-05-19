@@ -22,6 +22,7 @@ const MACROS: Macro[] = [
 
 interface MacroBuilderProps {
   lebel?: string;
+  placeholder?: string;
   url: string;
   setUrl: (val: string) => void;
   error?: FieldError;
@@ -32,6 +33,7 @@ interface MacroBuilderProps {
 
 const MacroBuilder: React.FC<MacroBuilderProps> = ({
   lebel,
+  placeholder = "Search For...",
   url,
   setUrl,
   error,
@@ -95,9 +97,9 @@ const MacroBuilder: React.FC<MacroBuilderProps> = ({
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         disabled={disabled}
-        className={`w-full border rounded p-2 resize-y ${
+        className={`w-full border rounded p-2 resize-y bg-white ${
           error ? "border-red-500" : "border-gray-300"
-        } focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed`}
+        } focus:outline-none focus:ring-0 disabled:bg-gray-100 disabled:cursor-not-allowed`}
         aria-describedby={errorId}
         aria-required="true"
         rows={4}
@@ -117,7 +119,7 @@ const MacroBuilder: React.FC<MacroBuilderProps> = ({
         >
           <input
             type="text"
-            placeholder="Search macros..."
+            placeholder={placeholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             disabled={disabled}

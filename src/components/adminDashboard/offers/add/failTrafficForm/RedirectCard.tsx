@@ -1,13 +1,9 @@
 import ToggleSwitch from "@/components/shared/buttons/ToggleSwitch";
 import SingleSelect from "@/components/shared/dataTable/SingleSelect";
 import TextInput from "@/components/shared/forms/TextInput";
-import {
-  Controller,
-  useFormContext,
-  useWatch,
-  FieldError,
-} from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { FiTrash2, FiMove } from "react-icons/fi";
+import { FieldError, FieldErrors } from "react-hook-form";
 
 type RedirectCardProps = {
   index: number;
@@ -40,15 +36,15 @@ export default function RedirectCard({
     formState: { errors },
   } = useFormContext();
 
-  const payPartner = useWatch({ name: `payPartner` });
+  const payPartner = useWatch({ name: `redirects.${index}.payPartner` });
+
+  const fieldErrors = (errors?.redirects as FieldErrors[] | undefined)?.[index];
 
   return (
     <div className="relative border border-gray-300 bg-white rounded-md p-4 shadow-sm space-y-4">
-      {/* Drag Handle */}
-
       {/* Header */}
       <div className="flex justify-between items-center">
-        <div className=" text-gray-400 cursor-move">
+        <div className="text-gray-400 cursor-move">
           <FiMove size={18} />
         </div>
         <span className="font-semibold">Priority: {index + 1}</span>
@@ -64,36 +60,34 @@ export default function RedirectCard({
       {/* Fail Reason & Destination Type */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Controller
-          name="failReason"
+          name={`redirects.${index}.failReason`}
           control={control}
           render={({ field }) => (
             <SingleSelect
-              id="failReason"
+              id={`failReason-${index}`}
               label="Fail Reason(s)"
               options={failReasonOptions}
               showSearch={false}
-              //   placeholder="Select fail reason"
               value={field.value}
               onChange={field.onChange}
-              error={errors?.failReason as FieldError | undefined}
+              error={fieldErrors?.failReason as FieldError | undefined}
               isDisabled={isSubmitting}
             />
           )}
         />
 
         <Controller
-          name="destinationType"
+          name={`redirects.${index}.destinationType`}
           control={control}
           render={({ field }) => (
             <SingleSelect
-              id="destinationType"
+              id={`destinationType-${index}`}
               label="Destination Type"
               options={destinationTypeOptions}
-              //   placeholder="Select destination type"
               showSearch={false}
               value={field.value}
               onChange={field.onChange}
-              error={errors?.destinationType as FieldError | undefined}
+              error={fieldErrors?.destinationType as FieldError | undefined}
               isDisabled={isSubmitting}
             />
           )}
@@ -102,34 +96,34 @@ export default function RedirectCard({
 
       {/* Offer Select */}
       <Controller
-        name="offer"
+        name={`redirects.${index}.offer`}
         control={control}
         render={({ field }) => (
           <SingleSelect
-            id="offer"
+            id={`offer-${index}`}
             label="Offer"
             options={offerOptions}
-            // placeholder="Select offer"
             showSearch={false}
             value={field.value}
             onChange={field.onChange}
-            error={errors?.offer as FieldError | undefined}
+            error={fieldErrors?.offer as FieldError | undefined}
             isDisabled={isSubmitting}
           />
         )}
       />
 
-      {/* Toggles */}
+      {/* Toggles and Partners Input */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ToggleSwitch
           label="Pay Partner"
           checked={!!payPartner}
-          onChange={(val) => setValue("payPartner", val)}
+          onChange={(val) => setValue(`redirects.${index}.payPartner`, val)}
           disabled={isSubmitting}
         />
+
         <Controller
           control={control}
-          name="conversionTime"
+          name={`redirects.${index}.applyToAllPartners`}
           render={({ field }) => (
             <>
               <ToggleSwitch
@@ -137,14 +131,17 @@ export default function RedirectCard({
                 checked={field.value}
                 onChange={field.onChange}
                 disabled={isSubmitting}
-                aria-label="Enable Click to Conversion Time"
               />
               {field.value && (
                 <TextInput
-                  name="partners"
+                  name={`redirects.${index}.partners`}
                   label="Partners"
                   register={register}
-                  errors={errors}
+                  errors={
+                    fieldErrors?.partners
+                      ? { partners: fieldErrors.partners }
+                      : undefined
+                  }
                   required
                   disabled={isSubmitting}
                 />

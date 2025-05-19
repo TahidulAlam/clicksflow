@@ -35,6 +35,7 @@ interface Offer {
   created: string;
   modified: string;
   action: string;
+  [key: string]: unknown;
 }
 
 const data: Offer[] = [
@@ -68,8 +69,21 @@ const data: Offer[] = [
 ];
 
 const columns = [
-  { header: "ID", accessor: "id", sortable: true, searchable: true },
-  { header: "Name", accessor: "name", sortable: true, searchable: true },
+  {
+    header: "ID",
+    accessor: "id",
+    sortable: true,
+    searchable: true,
+    width: "50px",
+    fixed: "left" as const,
+  },
+  {
+    header: "Name",
+    accessor: "name",
+    sortable: true,
+    searchable: true,
+    width: "400px",
+  },
   {
     header: "Advertiser",
     accessor: "advertiser",
@@ -133,7 +147,14 @@ const columns = [
   },
   { header: "Created", accessor: "created", sortable: true },
   { header: "Modified", accessor: "modified", sortable: true },
-  { header: "Action", accessor: "action", sortable: false },
+
+  {
+    header: "Action",
+    accessor: "action",
+    sortable: false,
+    width: "100px",
+    fixed: "right" as const,
+  },
 ];
 
 const OfferGroup = () => {

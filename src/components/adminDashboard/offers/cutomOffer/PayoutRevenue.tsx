@@ -22,7 +22,13 @@ const payoutData = [
 ];
 
 const payoutColumns = [
-  { header: "ID", accessor: "id", searchable: true },
+  {
+    header: "ID",
+    accessor: "id",
+    searchable: true,
+    fixed: "left",
+    width: "80px",
+  },
   { header: "Name", accessor: "name", searchable: true },
   { header: "Offer", accessor: "offer", searchable: true },
   { header: "Partners", accessor: "partners", searchable: true },
@@ -43,7 +49,13 @@ const payoutColumns = [
   },
   { header: "Created", accessor: "created", searchable: false },
   { header: "Modified", accessor: "modified", searchable: false },
-  { header: "Action", accessor: "action", searchable: false },
+  {
+    header: "Action",
+    accessor: "action",
+    searchable: false,
+    fixed: "right",
+    width: "100px",
+  },
 ];
 
 const PayoutRevenue = () => (

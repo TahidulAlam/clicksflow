@@ -88,6 +88,7 @@ interface NumberInputProps<T extends FieldValues> {
   id?: string;
   name?: Path<T>;
   label: string;
+  className?: string;
   inputLabel?: string;
   register: UseFormRegister<T>;
   errors: FieldErrors<T>;
@@ -105,6 +106,7 @@ const NumberInput = <T extends FieldValues>({
   id,
   name,
   label,
+  className,
   register,
   errors,
   disabled = false,
@@ -153,7 +155,7 @@ const NumberInput = <T extends FieldValues>({
               valueAsNumber ? { valueAsNumber: true } : undefined
             ))}
           disabled={disabled}
-          className={`w-full py-[6px] border rounded-md transition
+          className={`${className} w-full py-[6px] border rounded-md transition
             ${Icon ? "pl-10" : "pl-3"} ${IconR ? "pr-10" : "pr-3"}
             ${error ? "border-red-500" : "border-gray-300"}
             focus:outline-none focus:ring-0 focus:shadow-md

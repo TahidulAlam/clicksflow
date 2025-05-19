@@ -15,7 +15,7 @@ interface Column {
 
 interface DataListProps {
   title?: string;
-  data: Record<string, string | number | boolean | null>[];
+  data: Record<string, string | number | boolean | null>[]; // Modified to include boolean and null
   columns: Column[];
   addButtonLabel?: string;
   onAddClick?: () => void;

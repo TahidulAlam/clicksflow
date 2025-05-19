@@ -20,7 +20,13 @@ const partnerData = [
 ];
 
 const partnerColumns = [
-  { header: "ID", accessor: "id", searchable: true },
+  {
+    header: "ID",
+    accessor: "id",
+    searchable: true,
+    fixed: "left",
+    width: "80px",
+  },
   { header: "Name", accessor: "name", searchable: true },
   { header: "Country", accessor: "country", searchable: true },
   { header: "Email", accessor: "email", searchable: true },
@@ -48,7 +54,13 @@ const partnerColumns = [
     ),
   },
   { header: "Created", accessor: "created", searchable: false },
-  { header: "Action", accessor: "action", searchable: false },
+  {
+    header: "Action",
+    accessor: "action",
+    searchable: false,
+    fixed: "right",
+    width: "100px",
+  },
 ];
 
 const ManageList = () => (

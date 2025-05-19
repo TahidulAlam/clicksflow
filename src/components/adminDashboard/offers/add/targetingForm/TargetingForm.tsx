@@ -24,6 +24,7 @@ import TrafficFilteringModal, {
   TargetFilteringData,
   formSchema as eventFormSchema,
 } from "./TrafficFilteringModal";
+import FlexRow from "@/components/shared/responsibeForm/FlexRow";
 
 // Schema for the main form
 const formSchema = z.object({
@@ -370,7 +371,7 @@ export default function TargetingForm() {
           )}
         </div>
 
-        <div className="flex gap-2 mt-5">
+        <FlexRow cols={{ base: 1, sm: 1, md: 1, lg: 2 }}>
           <TextInput
             name="zipPostalCode"
             label="ZIP/Postal Code"
@@ -398,7 +399,7 @@ export default function TargetingForm() {
               />
             )}
           />
-        </div>
+        </FlexRow>
 
         <div className="flex gap-2 mt-5">
           <div className="w-1/2">
@@ -486,7 +487,7 @@ export default function TargetingForm() {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    className="px-4 py-2 bg-blue-100 rounded-lg border border-blue-950 text-blue-950"
+                    className="py-1.5 px-3 bg-blue-100 rounded-lg border border-blue-950 text-blue-950"
                     type="button"
                     onClick={() => handleIpAction("exclude")}
                     disabled={isSubmitting}
@@ -494,7 +495,7 @@ export default function TargetingForm() {
                     -
                   </button>
                   <button
-                    className="px-4 py-2 bg-blue-950 rounded-lg border border-blue-950 text-white"
+                    className="py-1.5 px-3 bg-blue-950 rounded-lg border border-blue-950 text-white"
                     type="button"
                     onClick={() => handleIpAction("include")}
                     disabled={isSubmitting}

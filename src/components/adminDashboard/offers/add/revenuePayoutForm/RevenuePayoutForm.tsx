@@ -203,68 +203,71 @@ const RevenuePayoutForm: React.FC = () => {
             + Add New
           </PrimaryBtn>
         </div>
-
-        <table className="w-full text-left text-xs table-auto overflow-x-scroll  mt-4">
-          <thead className="bg-gray-100 rounded-lg text-gray-600 border border-gray-400  ">
-            <tr>
-              <th className="p-2">Name</th>
-              <th className="p-2">Revenue Type</th>
-              <th className="p-2">Revenue/Event</th>
-              <th className="p-2">Payout Type</th>
-              <th className="p-2">Cost/Event</th>
-              <th className="p-2">Manual Approval</th>
-              <th className="p-2">Allow Duplicates</th>
-              <th className="p-2">Fire Partner Postback</th>
-              <th className="p-2">Fire Postback</th>
-              <th className="p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {events.map((event, idx) => (
-              <tr key={idx} className="border-t">
-                <td className="p-2">{event.name}</td>
-                <td className="p-2">{event.revenueType}</td>
-                <td className="p-2">${event.revenuePerEvent}</td>
-                <td className="p-2">
-                  {event.isPrivate ? "N/A" : event.payoutType || "N/A"}
-                </td>
-                <td className="p-2">
-                  {event.isPrivate
-                    ? "N/A"
-                    : `$${event.costPerConversionEvent || 0}`}
-                </td>
-                <td className="p-2">{event.manualApproval ? "Yes" : "No"}</td>
-                <td className="p-2">{event.allowDuplicates ? "Yes" : "No"}</td>
-                <td className="p-2">
-                  {event.isPrivate
-                    ? "N/A"
-                    : event.firePartnerPostback
-                    ? "Yes"
-                    : "No"}
-                </td>
-                <td className="p-2">{event.firePostback ? "Yes" : "No"}</td>
-                <td className="p-2 flex gap-2">
-                  <button
-                    type="button"
-                    className="text-blue-600 hover:underline"
-                    onClick={() => handleEditEvent(idx)}
-                    disabled={isSubmitting}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="text-red-600 hover:underline"
-                    onClick={() => handleDeleteEvent(idx)}
-                    disabled={isSubmitting}
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="border border-gray-300 rounded-md max-h-[500px] overflow-auto">
+          <table className="w-full border-separate border-spacing-0 text-left text-xs table-auto overflow-x-scroll">
+            <thead className="bg-gray-100 rounded-lg text-gray-600 border border-gray-400  ">
+              <tr>
+                <th className="p-2">Name</th>
+                <th className="p-2">Revenue Type</th>
+                <th className="p-2">Revenue/Event</th>
+                <th className="p-2">Payout Type</th>
+                <th className="p-2">Cost/Event</th>
+                <th className="p-2">Manual Approval</th>
+                <th className="p-2">Allow Duplicates</th>
+                <th className="p-2">Fire Partner Postback</th>
+                <th className="p-2">Fire Postback</th>
+                <th className="p-2">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {events.map((event, idx) => (
+                <tr key={idx} className="border-t">
+                  <td className="p-2">{event.name}</td>
+                  <td className="p-2">{event.revenueType}</td>
+                  <td className="p-2">${event.revenuePerEvent}</td>
+                  <td className="p-2">
+                    {event.isPrivate ? "N/A" : event.payoutType || "N/A"}
+                  </td>
+                  <td className="p-2">
+                    {event.isPrivate
+                      ? "N/A"
+                      : `$${event.costPerConversionEvent || 0}`}
+                  </td>
+                  <td className="p-2">{event.manualApproval ? "Yes" : "No"}</td>
+                  <td className="p-2">
+                    {event.allowDuplicates ? "Yes" : "No"}
+                  </td>
+                  <td className="p-2">
+                    {event.isPrivate
+                      ? "N/A"
+                      : event.firePartnerPostback
+                      ? "Yes"
+                      : "No"}
+                  </td>
+                  <td className="p-2">{event.firePostback ? "Yes" : "No"}</td>
+                  <td className="p-2 flex gap-2">
+                    <button
+                      type="button"
+                      className="text-blue-600 hover:underline"
+                      onClick={() => handleEditEvent(idx)}
+                      disabled={isSubmitting}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="text-red-600 hover:underline"
+                      onClick={() => handleDeleteEvent(idx)}
+                      disabled={isSubmitting}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {/* Form Actions */}
         <FormActions
           isSubmitting={isSubmitting}

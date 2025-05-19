@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import PrimaryBtn from "@/components/shared/buttons/PrimaryBtn";
-import DataTable from "@/components/shared/dataTable/DataTable";
+import DataTable, { Column } from "@/components/shared/dataTable/DataTable";
 import SearchBar from "@/components/shared/dataTable/SearchBar";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
@@ -15,19 +15,23 @@ interface Offer {
   category: string;
   countries: string;
   countriesname: string;
+  action: string;
+  colme: string;
+  [key: string]: unknown;
 }
 
 const data: Offer[] = [
   {
     id: 13,
-    thumbnail: "https://example.com/thumb13.png", // placeholder
+    thumbnail: "https://example.com/thumb13.png",
     name: "Leptozan - SS - Diet Supplement - TSL & VSL - [US, CA, AU, NZ] (13)",
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Diet & Weight Loss",
-
     countries: "United States +3",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 12,
@@ -36,9 +40,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Biz Opp",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 8,
@@ -47,9 +52,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 7,
@@ -58,9 +64,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 6,
@@ -69,9 +76,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 5,
@@ -80,9 +88,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 4,
@@ -91,9 +100,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 3,
@@ -102,9 +112,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 32,
@@ -113,9 +124,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 34,
@@ -124,9 +136,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 35,
@@ -135,9 +148,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 36,
@@ -146,9 +160,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 37,
@@ -157,9 +172,10 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
   {
     id: 38,
@@ -168,24 +184,70 @@ const data: Offer[] = [
     visibility: "Approval Required",
     advertiser: "Test ADV (EF) (1)",
     category: "Financial - Credit Scores",
-
     countries: "United States +1",
     countriesname: "abariya",
+    action: ":",
+    colme: "colme",
   },
 ];
 
-const columns = [
-  { header: "ID", accessor: "id", searchable: true },
-  { header: "Name", accessor: "name", searchable: true, sticky: true },
-  { header: "Visibility", accessor: "visibility", searchable: false },
-  { header: "Advertiser", accessor: "advertiser", searchable: true },
-  { header: "Category", accessor: "category", searchable: true },
-  { header: "Countries", accessor: "countries", searchable: false },
+const columns: Column<Offer>[] = [
+  {
+    header: "ID",
+    accessor: "id",
+    width: "100px",
+    fixed: "left", 
+    searchable: false,
+  },
+  {
+    header: "Name",
+    accessor: "name",
+    width: "400px",
+    searchable: true,
+  },
+  {
+    header: "Visibility",
+    accessor: "visibility",
+    searchable: false,
+    stickyAfter: 40,
+    width: "200px",
+  },
+  {
+    header: "Advertiser",
+    accessor: "advertiser",
+    searchable: true,
+    width: "200px",
+  },
+  {
+    header: "Category",
+    accessor: "category",
+    searchable: true,
+    width: "200px",
+  },
+  {
+    header: "Countries",
+    accessor: "countries",
+    searchable: false,
+    width: "200px",
+  },
   {
     header: "Countriesname",
     accessor: "countriesname",
+    width: "200px",
     searchable: false,
-    // sticky: true,
+  },
+
+  {
+    header: "Colme",
+    accessor: "colme",
+    width: "100px",
+    searchable: false,
+  },
+    {
+    header: "Action",
+    accessor: "action", 
+    fixed: "right",
+    width: "50px",
   },
 ];
 
@@ -197,7 +259,10 @@ const ManagePage = () => {
     return data.filter((row) =>
       columns.some((col) => {
         if (!col.searchable) return false;
-        const value = row[col.accessor as keyof Offer];
+        const value =
+          typeof col.accessor === "function"
+            ? col.accessor(row)
+            : row[col.accessor as keyof Offer];
         return String(value).toLowerCase().includes(searchTerm.toLowerCase());
       })
     );
@@ -225,12 +290,7 @@ const ManagePage = () => {
         </div>
       </div>
       <DataTable
-        data={
-          filteredData.map((offer) => ({ ...offer })) as Record<
-            string,
-            unknown
-          >[]
-        }
+        data={filteredData}
         columns={columns}
         defaultSortField="name"
         defaultSortOrder="asc"

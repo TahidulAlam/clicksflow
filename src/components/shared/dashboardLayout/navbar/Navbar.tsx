@@ -34,7 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   };
 
   return (
-    <div className="flex justify-between items-center bg-white px-6 py-3 rounded-xl relative border-2 border-gray-300 mb-5">
+    <div className="flex justify-between items-center bg-white px-6 py-3 rounded-lg relative border border-gray-300 mb-5">
       {/* Left: Path Name */}
       <div className="text-gray-600 font-semibold capitalize text-sm">
         {getLastPathName()}
