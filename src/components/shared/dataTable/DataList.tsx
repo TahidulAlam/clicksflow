@@ -10,7 +10,7 @@ import ToggleSwitch from "@/components/shared/buttons/ToggleSwitch";
 interface Column {
   header: string;
   accessor: string;
-  searchable: boolean;
+  searchable?: boolean;
 }
 
 interface DataListProps {
