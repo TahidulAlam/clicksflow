@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import Modal from "@/components/shared/modal/Modal";
+import { Modal } from "@/components/shared/modal/Modal";
 import TextInput from "@/components/shared/forms/TextInput";
 
 interface AddCategoryModalProps {
