@@ -59,14 +59,6 @@ const applicationColumns = [
     searchable: false,
     fixed: "right",
     width: "100px",
-    // render: (row: { action: string }) => (
-    //   <button
-    //     className="text-blue-600 underline hover:text-blue-800"
-    //     onClick={() => console.log(`Action on ${row.partner}`)}
-    //   >
-    //     {row.action}
-    //   </button>
-    // ),
   },
 ];
 

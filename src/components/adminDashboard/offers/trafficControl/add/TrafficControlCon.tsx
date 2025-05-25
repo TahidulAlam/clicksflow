@@ -72,10 +72,10 @@ const TrafficControlCon: React.FC<SmartLinkAddGeneralProps> = ({
 
   return (
     <Container>
-      <span className="text-xs">
+      {/* <span className="text-xs">
         Fields with an asterisk (<span className="text-red-700">*</span>) are
         required
-      </span>
+      </span> */}
 
       <FormArea
         schema={schema}

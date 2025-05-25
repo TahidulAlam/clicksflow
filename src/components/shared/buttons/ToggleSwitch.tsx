@@ -66,7 +66,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   className,
   onChange,
   disabled = false,
-  size = "md",
+  size = "lg",
 }) => {
   // Define size configurations
   const sizeStyles = {

@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useCallback, useMemo, useState, useRef } from "react";
+import { useEffect, useCallback, useMemo, useState } from "react";
 import { createSwapy, SwapEvent } from "swapy";
+import { FiGrid, FiRefreshCw } from "react-icons/fi";
 import MetricCard from "./MetricCard";
-import { FiGrid } from "react-icons/fi";
-import CustomizationPanel from "./CustomizationPanel";
+import MultiLevelDropdown from "@/components/shared/dropdown/MultiLevelDropdown";
 
 export type MetricKey = keyof typeof METRICS;
 export type SlotLayout = Record<string, MetricKey>;
 
-export const DEFAULT_LAYOUT: SlotLayout = {
+const DEFAULT_LAYOUT: SlotLayout = {
   "1": "cpc",
   "2": "payout",
   "3": "margin",
@@ -24,7 +24,7 @@ export const DEFAULT_LAYOUT: SlotLayout = {
   "12": "impressions",
 };
 
-export const METRICS = {
+const METRICS = {
   cpc: { id: "cpc", title: "CPC", unit: "$", isMoney: true },
   payout: { id: "payout", title: "Payout", unit: "$", isMoney: true },
   margin: { id: "margin", title: "Margin", unit: "%", isMoney: false },
@@ -84,10 +84,10 @@ const saveLayout = (layout: SlotLayout) => {
 
 export default function DnDGrid() {
   const [slotItems, setSlotItems] = useState<SlotLayout>(loadLayout);
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => saveLayout(slotItems), [slotItems]);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+
   const metricCards = useMemo(
     () =>
       Object.entries(slotItems).map(([slot, metricKey]) => {
@@ -120,28 +120,102 @@ export default function DnDGrid() {
     return () => swapy.destroy();
   }, [handleSwap]);
 
+  const handleToggle = (metricKey: MetricKey) => {
+    setSlotItems((prev) => {
+      const isEnabled = Object.values(prev).includes(metricKey);
+      const newLayout = { ...prev };
+
+      if (isEnabled) {
+        Object.keys(newLayout).forEach((slot) => {
+          if (newLayout[slot] === metricKey) delete newLayout[slot];
+        });
+      } else {
+        const defaultSlot = Object.entries(DEFAULT_LAYOUT).find(
+          ([, key]) => key === metricKey
+        )?.[0];
+        if (defaultSlot) newLayout[defaultSlot] = metricKey;
+      }
+
+      return newLayout;
+    });
+  };
+
+  const filteredMetrics = Object.values(METRICS).filter((metric) =>
+    metric.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="relative min-h-screen">
-      <div className="p-4 z-20">
-        <button
-          ref={buttonRef}
-          onClick={() => setIsPanelOpen(true)}
-          className="float-end p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow z-10"
-          aria-label="Open customization panel"
-        >
-          <FiGrid className="w-4 h-4 text-blue-950" />
-        </button>
-        <div className="absolute right-0 mr-5 mt-8">
-          <CustomizationPanel
-            isOpen={isPanelOpen}
-            onClose={() => setIsPanelOpen(false)}
-            metrics={Object.values(METRICS).map((metric) => ({ ...metric }))}
-            slotItems={slotItems}
-            setSlotItems={setSlotItems}
-            defaultLayout={DEFAULT_LAYOUT} // Ensure this matches the updated prop type
-            anchorRef={buttonRef as React.RefObject<HTMLElement>}
-          />
-        </div>
+    <div className="min-h-screen">
+      <div className="z-20 flex justify-end">
+        <MultiLevelDropdown
+          label={<FiGrid className="w-4 h-4 text-blue-950" />}
+          position="bottom-right"
+          submenuPosition="left"
+          menuItems={[
+            {
+              labelHeader: "Dashboard Customization",
+              label: "Matrix",
+              children: [
+                {
+                  content: (
+                    <div className=" w-80 p-3 z-50">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="ml-2 font-medium">Matrix</span>
+                        <button
+                          onClick={() => setSlotItems(DEFAULT_LAYOUT)}
+                          className="ml-auto p-2 hover:bg-gray-100 rounded-lg"
+                          title="Reset to Default"
+                        >
+                          <FiRefreshCw className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Search metrics..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full mb-3 p-2 border rounded-md text-sm"
+                      />
+                      <div className="space-y-2 max-h-64 overflow-y-auto">
+                        {filteredMetrics.map((metric) => (
+                          <div
+                            key={metric.id}
+                            className="flex items-center justify-between p-1 bg-gray-50 rounded-md hover:bg-gray-100"
+                          >
+                            <span className="text-sm">{metric.title}</span>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={Object.values(slotItems).includes(
+                                  metric.id
+                                )}
+                                onChange={() => handleToggle(metric.id)}
+                                className="sr-only"
+                              />
+                              <div className="w-10 h-5 bg-gray-300 rounded-full peer-checked:bg-blue-600 relative">
+                                <div
+                                  className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
+                                    Object.values(slotItems).includes(metric.id)
+                                      ? "translate-x-5 bg-blue-950"
+                                      : ""
+                                  }`}
+                                />
+                              </div>
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ),
+                },
+              ],
+            },
+            {
+              label: "Card",
+              children: [{}],
+            },
+          ]}
+        />
       </div>
 
       <div className="mt-5">

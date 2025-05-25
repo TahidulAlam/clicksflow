@@ -20,30 +20,6 @@ export interface Column<T> {
   searchable?: boolean;
 }
 
-// Assuming you have this Column<T> type in your DataTable component:
-// type Column<T> = {
-//   header: string;
-//   accessor:
-//     | keyof T
-//     | ((row: T) => string | number | React.ReactNode | JSX.Element);
-//   sortable?: boolean;
-//   searchable?: boolean;
-//   stickyAfter?: number;
-//   width?: string;
-//   fixed?: "left" | "right";
-// };
-
-// Assuming you have this Column<T> type in your DataTable component:
-// type Column<T> = {
-//   header: string;
-//   accessor: keyof T | ((row: T) => string | number | React.ReactNode);
-//   stickyAfter?: number;
-//   sortable?: boolean;
-//   searchable?: boolean;
-//   width?: string;
-//   fixed?: "left" | "right";
-// };
-
 interface DataTableProps<T extends Record<string, unknown>> {
   data: T[];
   columns: Column<T>[];

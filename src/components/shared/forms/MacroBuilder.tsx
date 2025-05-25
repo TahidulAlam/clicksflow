@@ -22,6 +22,7 @@ const MACROS: Macro[] = [
 
 interface MacroBuilderProps {
   lebel?: string;
+  labelSideSpan?: string;
   placeholder?: string;
   url: string;
   setUrl: (val: string) => void;
@@ -33,6 +34,7 @@ interface MacroBuilderProps {
 
 const MacroBuilder: React.FC<MacroBuilderProps> = ({
   lebel,
+  labelSideSpan,
   placeholder = "Search For...",
   url,
   setUrl,
@@ -76,8 +78,10 @@ const MacroBuilder: React.FC<MacroBuilderProps> = ({
           className="font-bold text-xs text-gray-700"
         >
           {lebel}
+          {labelSideSpan && (
+            <span className="text-xs font-base px-2"> {labelSideSpan}</span>
+          )}
         </label>
-
         {showDropdownButton && (
           <button
             type="button"
@@ -97,9 +101,9 @@ const MacroBuilder: React.FC<MacroBuilderProps> = ({
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         disabled={disabled}
-        className={`w-full border rounded p-2 resize-y bg-white ${
+        className={`w-full border rounded-lg p-2 resize-y bg-white ${
           error ? "border-red-500" : "border-gray-300"
-        } focus:outline-none focus:ring-0 disabled:bg-gray-100 disabled:cursor-not-allowed`}
+        } focus:outline-none focus:ring-0 disabled:bg-gray-100 disabled:cursor-not-allowed focus:shadow-md`}
         aria-describedby={errorId}
         aria-required="true"
         rows={4}

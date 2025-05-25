@@ -11,7 +11,7 @@ interface ContainerProps {
 
 const Container: React.FC<ContainerProps> = ({
   children,
-  maxWidth = "max-w-3xl",
+  maxWidth = "max-w-2xl",
   padding = "p-6",
   className,
 }) => {
